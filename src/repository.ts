@@ -3,11 +3,11 @@ import { Repository, Account } from "./interfaces/interfaces";
 export class AccountRepository<T extends Account> implements Repository<T> {
     private accounts: T[] = []
 
-    add(item: T): void {
+    add(item: any): void {
         this.accounts.push(item);
     }
 
-    getAll(): T[] {
+    getAll(): any[] {
         return this.accounts
     }
 
