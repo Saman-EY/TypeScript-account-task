@@ -8,8 +8,8 @@ export interface Account {
 
 export interface Repository<T> {
 
-    add<T>(item: T): void,
-    getAll<T>() : T[],
+    add(item: T): void,
+    getAll() : T[],
     getById(id: number) : T | undefined,    
 
 }

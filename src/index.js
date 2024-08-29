@@ -1,7 +1,4 @@
 "use strict";
-// const greet = (name: string): string => {
-//     return `Hello, ${name}!`;
-// };
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -48,14 +45,39 @@ function prompt(question) {
 }
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        const name = yield prompt('Enter account name: ');
-        const phoneNumber = yield prompt('Enter phone number: ');
-        const amount = parseFloat(yield prompt('Enter account amount: '));
-        accountService.createAccount(name, phoneNumber, amount);
-        console.log('Account created successfully!\n');
-        console.log('List of all accounts:');
-        accountService.listAccounts();
-        rl.close();
+        while (true) {
+            const action = yield prompt('Enter "c" to add an account - "q" to exit - "l" for showing all accounts - "f" for find an account\n');
+            switch (action.toLowerCase()) {
+                case 'q':
+                    console.log('Have a nice day.');
+                    rl.close();
+                    return;
+                case 'l':
+                    console.log("Here's the list:");
+                    accountService.listAccounts();
+                    break;
+                case 'c':
+                    const name = yield prompt('Enter account name: ');
+                    const phoneNumber = yield prompt('Enter phone number: ');
+                    const amount = parseFloat(yield prompt('Enter account amount: '));
+                    accountService.createAccount(name, phoneNumber, amount);
+                    console.log('Account created successfully!\n');
+                    break;
+                case 'f':
+                    const id = yield prompt("Enter the user id to show the account:  ");
+                    const result = accountService.showUserAcc(+id);
+                    if (result) {
+                        console.log(Object.assign({}, result));
+                    }
+                    else {
+                        console.log("account not found!");
+                    }
+                    break;
+                default:
+                    console.log('Invalid option, try again');
+                    break;
+            }
+        }
     });
 }
 main();

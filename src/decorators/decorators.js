@@ -2,9 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LogCreation = LogCreation;
 function LogCreation(target, propertyName, descriptor) {
-    const method = descriptor.value;
+    const originalMethod = descriptor.value; // Save the original method
     descriptor.value = function (...args) {
-        console.log(`creating account for ${args[0].name}`);
-        return method.apply(this, args);
+        console.log(`Creating account for: ${args[0]}`); // Log before method execution
+        return originalMethod.apply(this, args); // Call the original method
     };
+    return descriptor;
 }

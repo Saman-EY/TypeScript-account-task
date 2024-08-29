@@ -7,7 +7,6 @@ const rl = readline.createInterface({
     output: process.stdout,
 });
 
-const filePath = 'accounts.json'; // Path to the JSON file
 const accountService = new AccountService();
 
 function prompt(question: string): Promise<string> {
@@ -15,26 +14,49 @@ function prompt(question: string): Promise<string> {
 }
 
 async function main() {
-    let continueCreating = true;
+    while (true) {
+        const action = await prompt('Enter "c" to add an account - "q" to exit - "l" for showing all accounts - "f" for find an account\n');
 
-    while (continueCreating) {
-        const name = await prompt('Enter account name: ');
-        const phoneNumber = await prompt('Enter phone number: ');
-        const amount = parseFloat(await prompt('Enter account amount: '));
 
-        accountService.createAccount(name, phoneNumber, amount);
-        console.log('Account created successfully!\n');
+        switch (action.toLowerCase()) {
+            case 'q':
+                console.log('Have a nice day.');
+                rl.close();
+                return;
 
-        const response = await prompt('Would you like to create another account? (yes/no): ');
-        if (response.toLowerCase() !== 'yes') {
-            continueCreating = false;
+            case 'l':
+                console.log("Here's the list:");
+                accountService.listAccounts();
+                break;
+
+            case 'c':
+                const name = await prompt('Enter account name: ');
+                const phoneNumber = await prompt('Enter phone number: ');
+                const amount = parseFloat(await prompt('Enter account amount: '));
+
+                accountService.createAccount(name, phoneNumber, amount);
+                console.log('Account created successfully!\n');
+                break;
+
+            case 'f':
+                const id = await prompt("Enter the user id to show the account:  ");
+                const result = accountService.showUserAcc(+id);
+                if (result) {
+
+                    console.log({ ...result });
+                } else {
+                    console.log("account not found!");
+                }
+
+                break;
+
+            default:
+                console.log('Invalid option, try again');
+                break;
         }
+
+
     }
-
-    console.log('List of all accounts:');
-    accountService.listAccounts();
-
-    rl.close();
 }
 
 main();
