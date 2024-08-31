@@ -1,11 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LogCreation = LogCreation;
-function LogCreation(target, propertyName, descriptor) {
-    const originalMethod = descriptor.value; // Save the original method
+exports.AddCreationDate = AddCreationDate;
+// src/decorators/decorators.ts
+function AddCreationDate(target, propertyKey, descriptor) {
+    const originalMethod = descriptor.value;
     descriptor.value = function (...args) {
-        console.log(`Creating account for: ${args[0]}`); // Log before method execution
-        return originalMethod.apply(this, args); // Call the original method
+        const account = originalMethod.apply(this, args);
+        if (account && typeof account === "object") {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const day = now.getDay();
+            // account.createdAt = new Date(now.getFullYear(), now.getMonth(), now.getDate()); 
+            account.createdAt = `${year}-${month}-${day}`;
+        }
+        return account;
     };
     return descriptor;
 }
